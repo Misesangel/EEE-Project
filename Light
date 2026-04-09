@@ -1,1 +1,38 @@
-#inclue
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>  // For sleep()
+#include <conio.h>   // For kbhit() and getch() (Windows specific)
+
+void show_light(char* color, int seconds) {
+    printf("\n--- %s LIGHT: %d seconds remaining ---\n", color, seconds);
+    for (int i = seconds; i > 0; i--) {
+        printf("%d... ", i);
+        fflush(stdout); // Ensures text appears immediately
+        
+        // Simulate Pedestrian Button: Check for key press during the wait
+        if (kbhit()) {
+            char key = getch();
+            if (key == 'p' || key == 'P') {
+                printf("\n[!] Pedestrian Button Pressed! Speeding up change...\n");
+                return; // Interrupt the current light
+            }
+        }
+        sleep(1);
+    }
+    printf("\n");
+}
+
+int main() {
+    printf("=== Traffic Light Simulator ===\n");
+    printf("Controls: Press 'P' at any time for Pedestrian Crossing.\n");
+    printf("Press 'Ctrl+C' to exit.\n\n");
+
+    while(1) {
+        show_light("RED", 5);
+        show_light("GREEN", 8);
+        show_light("YELLOW", 3);
+    }
+
+    return 0;
+}
+
