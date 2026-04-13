@@ -1,0 +1,24 @@
+#include <Arduino.h>
+
+const int tempSensorPin = A0;
+const int fanMotorPin = 9;
+const int tempThreshold = 30;
+
+void setup() {
+    pinMode(fanMotorPin, OUTPUT);
+    pinMode(tempSensorPin, INPUT);
+}
+
+void loop() {
+    int sensorValue = analogRead(tempSensorPin);
+    float voltage = sensorValue * (5.0 / 1023.0);
+    float temperatureC = (voltage - 0.5) * 100.0;
+
+    if (temperatureC > tempThreshold) {
+        digitalWrite(fanMotorPin, HIGH);
+    } else {
+        digitalWrite(fanMotorPin, LOW);
+    }
+    
+    delay(1000);
+}
