@@ -36,3 +36,68 @@ int main() {
     return 0;
 }
 
+#include <Servo.h>
+
+// Pin Definitions
+#define LeftSensor 9
+#define RightSensor 10
+#define FrontSensor 8
+#define LM1 2
+#define LM2 3
+#define RM1 4
+#define RM2 5
+#define Pump 6
+#define ServoPin 11
+
+Servo myservo;
+boolean fire = false;
+
+void setup() {
+  pinMode(LeftSensor, INPUT);
+  pinMode(RightSensor, INPUT);
+  pinMode(FrontSensor, INPUT);
+  pinMode(LM1, OUTPUT); pinMode(LM2, OUTPUT);
+  pinMode(RM1, OUTPUT); pinMode(RM2, OUTPUT);
+  pinMode(pump, OUTPUT);
+  
+  myservo.attach(ServoPin);
+  myservo.write(90);
+  digitalWrite(Pump, HIGH); // Off
+}
+
+void extinguishFire() {
+  // Stop movement and activate pump
+  digitalWrite(LM1, HIGH); digitalWrite(LM2, HIGH);
+  digitalWrite(RM1, HIGH); digitalWrite(RM2, HIGH);
+  digitalWrite(Pump, LOW); 
+  delay(500);
+  
+  // Sweep servo
+  for (int pos = 50; pos <= 130; pos += 1) { myservo.write(pos); delay(10); }
+  for (int pos = 130; pos >= 50; pos -= 1) { myservo.write(pos); delay(10); }
+  
+  digitalWrite(Pump, HIGH);
+  myservo.write(90);
+  fire = false;
+}
+
+void loop() {
+  // Logic to read sensors and move robot based on flame position
+  if (digitalRead(FrontSensor) == 0) {
+    // Move forward
+    fire = true;
+  } else if (digitalRead(LeftSensor) == 0) {
+    // Turn left
+  } else if (digitalRead(RightSensor) == 0) {
+    // Turn right
+  } else {
+    // Stop
+  }
+
+  if (fire) {
+    extinguishFire();
+  }
+  delay(100);
+}
+
+
