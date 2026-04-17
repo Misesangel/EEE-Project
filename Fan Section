@@ -22,3 +22,33 @@ void loop() {
     
     delay(1000);
 }
+
+#include <Arduino.h>
+
+const int tempSensorPin = A0;
+const int fanPWMPin = 9;
+const int minTemp = 25;
+const int maxTemp = 45;
+
+void setup() {
+    pinMode(fanPWMPin, OUTPUT);
+    pinMode(tempSensorPin, INPUT);
+}
+
+void loop() {
+    int sensorValue = analogRead(tempSensorPin);
+    float voltage = sensorValue * (5.0 / 1023.0);
+    float temperatureC = (voltage - 0.5) * 100.0;
+
+    if (temperatureC < minTemp) {
+        analogWrite(fanPWMPin, 0);
+    } else if (temperatureC >= maxTemp) {
+        analogWrite(fanPWMPin, 255);
+    } else {
+        int fanSpeed = map(temperatureC, minTemp, maxTemp, 50, 255);
+        analogWrite(fanPWMPin, fanSpeed);
+    }
+    
+    delay(500);
+}
+
