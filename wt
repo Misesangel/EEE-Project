@@ -1,0 +1,23 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    double density = 1000.0;
+    double gravity = 9.81;
+    double head, flowRate, efficiency;
+
+    cout << "Enter head (meters): ";
+    cin >> head;
+    cout << "Enter flow rate (m^3/s): ";
+    cin >> flowRate;
+    cout << "Enter efficiency (0.0 to 1.0): ";
+    cin >> efficiency;
+
+    double power = efficiency * density * gravity * head * flowRate;
+
+    cout << "Power Output: " << power << " Watts" << endl;
+    cout << "Power Output: " << power / 1000.0 << " kilo-Watts" << endl;
+
+    return 0;
+}
